@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FCM Demo</title>
+    <script type="module">
+        import { initializeApp } from 'https://www.gstatic.com/firebasejs/11.0.1/firebase-app.js';
+        import { getMessaging, getToken, onMessage } from 'https://www.gstatic.com/firebasejs/11.0.1/firebase-messaging.js';
+
+        const firebaseConfig = {
+  apiKey: "AIzaSyDdS2hba_4oJWk8zSwMtx7xz7wFBYt1_KQ",
+  authDomain: "whatsapp-clone-30fe9.firebaseapp.com",
+  projectId: "whatsapp-clone-30fe9",
+  storageBucket: "whatsapp-clone-30fe9.appspot.com",
+  messagingSenderId: "264597757126",
+  appId: "1:264597757126:web:820d6a782c1fd40b354bc7",
+  measurementId: "G-0V7LW83BZH"
+};
+        const app = initializeApp(firebaseConfig);
+        const messaging = getMessaging(app);
+
+        // Request permission only on button click
+        document.addEventListener('DOMContentLoaded', () => {
+            const requestButton = document.getElementById('request-permission');
+            requestButton.addEventListener('click', requestPermission);
+        });
+
+        async function requestPermission() {
+            try {
+                await Notification.requestPermission();
+                console.log("Notification permission granted.");
+                const token = await getToken(messaging);
+                console.log("Device Token: ", token);
+            } catch (error) {
+                console.error("Unable to get permission to notify.", error);
+            }
+
+            // Register the service worker
+            if ('serviceWorker' in navigator) {
+                navigator.serviceWorker.register('/firebase-messaging-sw.js')
+                    .then((registration) => {
+                        console.log('Service Worker registered with scope:', registration.scope);
+                    })
+                    .catch((error) => {
+                        console.error('Service Worker registration failed:', error);
+                    });
+            }
+        }
+
+        onMessage(messaging, (payload) => {
+            console.log('Message received. ', payload);
+            const notificationTitle = payload.notification.title;
+            const notificationOptions = {
+                body: payload.notification.body,
+                icon: payload.notification.icon
+            };
+            new Notification(notificationTitle, notificationOptions);
+        });
+    </script>
+</head>
+<body>
+    <h1>Firebase Cloud Messaging Demo</h1>
+    <button id="request-permission">Request Notification Permission</button>
+</body>
+</html>
