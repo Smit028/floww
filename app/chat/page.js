@@ -443,46 +443,146 @@ export default function Home() {
 
         {/* 30% Width Column */}
         <div
-        className={`${
-          showThirdColumn ? "hidden" : "block"
-        } w-full lg:w-[30%] bg-gray-200`}
-      >
-        <UserList
-          users={usersWithMessages}
-          selectedUser={selectedUser}
-          totalusers={users}
-          onUserSelect={handleUserSelect}
-          className="w-full md:w-1/4 lg:w-1/5 border-r border-gray-300 bg-white h-full overflow-y-auto shadow-lg"
-          currentUser={currentUser}
-        />
-      </div>
+          className={`${
+            showThirdColumn ? "hidden" : "block"
+          } w-full lg:w-[30%] bg-gray-200`}
+        >
+          <UserList
+            users={usersWithMessages}
+            selectedUser={selectedUser}
+            totalusers={users}
+            onUserSelect={handleUserSelect}
+            className="w-full md:w-1/4 lg:w-1/5 border-r border-gray-300 bg-white h-full overflow-y-auto shadow-lg"
+            currentUser={currentUser}
+            // usersWithLastMessages={usersWithLastMessages}
+          />
+        </div>
 
-      {/* 70% Width Column */}
-      <div
-        className={`${
-          showThirdColumn ? "block" : "hidden"
-        } w-full lg:w-[70%] bg-gray-300 lg:block`}
-      >
-        {selectedUser && (
-          <div className="flex-1 flex flex-col bg-white h-full">
-            <div className="p-4 border-b border-gray-300 bg-gray-50 flex items-center">
-              {/* Only show the "back" button on mobile */}
-              {window.innerWidth < 768 && (
-                <button
-                  onClick={goBackToListColumn}
-                  className="text-blue-500 mr-2"
+        {/* 70% Width Column */}
+        <div
+          className={`${
+            showThirdColumn ? "block" : "hidden"
+          } w-full lg:w-[70%] bg-gray-300 lg:block`}
+        >
+          {selectedUser && (
+            <div className="flex-1 flex flex-col bg-white h-full">
+              <div className="p-4 border-b border-gray-300 bg-gray-50 flex items-center">
+                {window.innerWidth < 768 && (
+                  <button
+                    onClick={goBackToSecondColumn}
+                    className="text-blue-500 mr-2"
+                  >
+                    ← Back
+                  </button>
+                )}
+
+                {/* Profile Image of Selected User */}
+                <img
+                  src={selectedUser.photoURL || Img1.src} // Use selected user's photo or a default image
+                  alt={`${selectedUser.name}'s profile`}
+                  className="w-8 h-8 rounded-full mr-3" // Style for the image
+                />
+                <h3 className="text-lg font-semibold">{selectedUser.name}</h3>
+                <button onClick={() => handlevoicecall()}>Call</button>
+              </div>  
+
+              <div className="flex-1 overflow-y-auto bg-gray-50 max-h-[calc(100vh-200px)]">
+                <div className="flex flex-col space-y-4 p-4">
+                  {messages.map((msg) => {
+                    const messageUser = users.find(
+                      (user) => user.id === msg.uid
+                    );
+                    const messageTime = new Date(
+                      msg.timestamp?.seconds * 1000
+                    ).toLocaleTimeString([], {
+                      hour: "2-digit",
+                      minute: "2-digit",
+                    });
+
+                    return (
+                      <div
+                        key={msg.id}
+                        className={`flex items-start space-x-3 ${
+                          msg.uid === auth.currentUser.uid ? "justify-end" : ""
+                        }`}
+                      >
+                        <div></div>
+                        <div
+                          className={`p-2 rounded-lg shadow-sm max-w-xs ${
+                            msg.uid === auth.currentUser.uid
+                              ? "bg-[#dcf8c6] text-black self-end"
+                              : "bg-gray-200 text-gray-800 self-start"
+                          } flex flex-col`}
+                          style={{
+                            wordWrap: "break-word",
+                            overflowWrap: "break-word",
+                          }} // Allow text wrapping
+                        >
+                          <div className="flex-1">
+                            {msg.imageUrl ? (
+                              <img
+                                src={msg.imageUrl}
+                                alt="Sent"
+                                className="rounded-md mb-1"
+                              />
+                            ) : (
+                              <span className="block mb-1">{msg.text}</span>
+                            )}
+                          </div>
+                          <div className="flex justify-end items-center space-x-1 text-[10px] text-gray-500">
+                            <span>{messageTime}</span>
+                            {msg.uid === auth.currentUser.uid && ( // Only show ticks for the sender's messages
+                              <span
+                                className={`ml-1 ${
+                                  msg.seen ? "text-green-600" : "text-gray-500"
+                                }`}
+                              >
+                                {msg.seen ? "✓✓" : "✓"}
+                              </span>
+                            )}
+                          </div>
+                        </div>
+                      </div>
+                    );
+                  })}
+
+                  <div ref={messagesEndRef} />
+                </div>
+              </div>
+
+              <div className="absolute w-[-webkit-fill-available] bottom-0 p-2 mb-4 border-t border-gray-300 bg-gray-50 flex items-center space-x-2">
+                <textarea
+                  ref={inputRef}
+                  value={newMessage}
+                  onChange={(e) => setNewMessage(e.target.value)}
+                  onKeyDown={handleKeyDown}
+                  placeholder="Type your message..."
+                  className="flex-1 p-2 border rounded-md resize-none focus:outline-none text-black"
+                  rows="1"
+                />
+                <input
+                  type="file"
+                  accept="image/*"
+                  onChange={handleImageChange}
+                  className="hidden"
+                  id="image-upload"
+                />
+                <label
+                  htmlFor="image-upload"
+                  className="p-2 text-blue-500 cursor-pointer"
                 >
-                  ← Back
+                  📷
+                </label>
+                <button
+                  onClick={handleSend}
+                  className="bg-blue-500 hover:bg-blue-600 text-white p-2 rounded-md"
+                >
+                  Send
                 </button>
-              )}
-              {/* Other elements of the header */}
+              </div>
             </div>
-            <div className="flex-1 overflow-y-auto bg-gray-50 max-h-[calc(100vh-200px)]">
-              {/* Messages and other content */}
-            </div>
-          </div>
-        )}
-      </div>
+          )}
+        </div>
       </div>
       <div
         className={`fixed bottom-0 left-20 bg-gray-800 text-white w-[500px] p-4 flex  transition-transform duration-500  ease-in-out ${
