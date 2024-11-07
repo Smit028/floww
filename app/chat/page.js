@@ -458,7 +458,7 @@ export default function Home() {
         </div>
 
         {/* 70% Width Column */}
-        <div className={`${showThirdColumn ? "block" : "hidden"} w-full lg:w-[70%] bg-gray-300 lg:block`}>
+     <div className={`${showThirdColumn ? "block" : "hidden"} w-full lg:w-[70%] bg-gray-300 lg:block`}>
   {selectedUser && (
     <div className="flex flex-col h-full">
       {/* Header Section */}
