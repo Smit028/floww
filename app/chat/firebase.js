@@ -3,8 +3,6 @@ import { initializeApp } from 'firebase/app';
 import { getFirestore } from 'firebase/firestore';
 import { getAuth } from 'firebase/auth';
 import { getStorage } from "firebase/storage";
-import { getMessaging } from "firebase/messaging";
-
 const firebaseConfig = {
   apiKey: "AIzaSyDdS2hba_4oJWk8zSwMtx7xz7wFBYt1_KQ",
   authDomain: "whatsapp-clone-30fe9.firebaseapp.com",
@@ -20,6 +18,5 @@ const app = initializeApp(firebaseConfig);
 const firestore = getFirestore(app);
 const auth = getAuth(app);
 const storage = getStorage(app); // Initialize Firebase Storage
-const messaging = getMessaging(app);
 
-export { firestore, auth ,storage , messaging}; // Ensure you export auth and firestore
+export { firestore, auth ,storage}; // Ensure you export auth and firestore
