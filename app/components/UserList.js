@@ -11,8 +11,9 @@ import {
 } from "firebase/firestore";
 import { auth, firestore } from "../chat/firebase";
 
-const UserList = ({ users, selectedUser, onUserSelect, unreadCounts }) => {
+const UserList = ({ users, selectedUser, onUserSelect, unreadCounts, totalusers }) => {
   const [searchQuery, setSearchQuery] = useState("");
+  const [dropdownSearchQuery, setDropdownSearchQuery] = useState(""); // State for dropdown search query
   const [filteredUsers, setFilteredUsers] = useState([]);
   const [usersWithLastMessages, setUsersWithLastMessages] = useState([]);
 
@@ -90,7 +91,7 @@ const UserList = ({ users, selectedUser, onUserSelect, unreadCounts }) => {
       const aLastMessage = usersWithLastMessages.find((u) => u.id === a.id);
       const bLastMessage = usersWithLastMessages.find((u) => u.id === b.id);
       return (
-        (bLastMessage?.timestamp?.seconds || 0) -
+        (bLastMessage?.timestamp?.seconds || 0) - 
         (aLastMessage?.timestamp?.seconds || 0)
       );
     });
@@ -100,49 +101,101 @@ const UserList = ({ users, selectedUser, onUserSelect, unreadCounts }) => {
 
   const formatTimestamp = (timestamp) => {
     if (!timestamp) return "";
-  
+
     const messageDate = new Date(timestamp.seconds * 1000);
     const today = new Date();
     const yesterday = new Date();
     yesterday.setDate(today.getDate() - 1);
-  
+
     const isToday =
       messageDate.getDate() === today.getDate() &&
       messageDate.getMonth() === today.getMonth() &&
       messageDate.getFullYear() === today.getFullYear();
-  
+
     const isYesterday =
       messageDate.getDate() === yesterday.getDate() &&
       messageDate.getMonth() === yesterday.getMonth() &&
       messageDate.getFullYear() === yesterday.getFullYear();
-  
+
     if (isToday) {
-      // Display time if the message is from today
       const hours = messageDate.getHours().toString().padStart(2, "0");
       const minutes = messageDate.getMinutes().toString().padStart(2, "0");
       return `${hours}:${minutes}`;
     } else if (isYesterday) {
-      // Display "Yesterday" if the message is from the previous day
       return "Yesterday";
     } else {
-      // Display the date in DD/MM/YYYY format if the message is older than one day
       const day = messageDate.getDate().toString().padStart(2, "0");
       const month = (messageDate.getMonth() + 1).toString().padStart(2, "0");
       const year = messageDate.getFullYear();
       return `${day}/${month}/${year}`;
     }
   };
-  
+
+  const [isOpen, setIsOpen] = useState(false);
+  const toggleDropdown = () => setIsOpen(!isOpen);
+
+  // Filtered dropdown users based on the search query
+  const filteredDropdownUsers = totalusers
+    .filter(
+      (user) =>
+        !filteredUsers.some((filteredUser) => filteredUser.id === user.id) && 
+        (user.name.toLowerCase().includes(dropdownSearchQuery.toLowerCase()) || 
+         user.email.toLowerCase().includes(dropdownSearchQuery.toLowerCase()))
+    )
+    .map((user) => (
+      <li
+        key={user.id}
+        onClick={() => onUserSelect(user)} // select user on click
+        className="block px-4 py-2 text-gray-700 hover:bg-gray-100 cursor-pointer w-full"
+      >
+        <div className="flex items-center">
+          <img
+            src={user.photoURL || img1.src}
+            alt={user.name}
+            className="w-10 h-10 rounded-full mr-4"
+          />
+          <span>{user.name}</span>
+        </div>
+      </li>
+    ));
 
   return (
     <div className="w-full border-r border-gray-300 bg-gray-50 h-full flex flex-col transition-all duration-500 ease-in-out">
       <div className="p-4 flex justify-between items-center border-b">
         <h2 className="font-semibold text-lg">Users</h2>
-        <Link href={"/profile"}>
-          <button className="text-blue-500 hover:underline">
-            Edit Profile
+        <div className="relative inline-block text-left">
+          <button
+            onClick={toggleDropdown}
+            className="px-4 py-2 bg-blue-500 text-white rounded-md focus:outline-none"
+          >
+            Open Menu
           </button>
-        </Link>
+
+          <div
+            className={`absolute left-1/2 transform -translate-x-1/2 mt-2 w-72 bg-white rounded-md shadow-lg ring-1 ring-black ring-opacity-5 transition-all duration-300 ease-out z-50 ${
+              isOpen ? "opacity-100 scale-100" : "opacity-0 scale-95 pointer-events-none"
+            } fixed top-10 left-0 right-0 max-h-60 overflow-y-auto`}
+          >
+            {/* Search input for dropdown */}
+            <div className="p-2">
+              <input
+                type="text"
+                placeholder="Search user..."
+                value={dropdownSearchQuery}
+                onChange={(e) => setDropdownSearchQuery(e.target.value)}
+                className="w-full p-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 transition duration-300 ease-in-out text-black"
+              />
+            </div>
+
+            <ul className="py-1 w-full">
+              {filteredDropdownUsers.length > 0 ? (
+                filteredDropdownUsers
+              ) : (
+                <li className="px-4 py-2 text-gray-500">No users found</li>
+              )}
+            </ul>
+          </div>
+        </div>
       </div>
 
       <div className="p-4">
@@ -201,8 +254,8 @@ const UserList = ({ users, selectedUser, onUserSelect, unreadCounts }) => {
                     {lastMessageTime}
                   </span>
                   {lastMessage &&
-                    !lastMessage.isMyMessage && // Last message not from current user
-                    !lastMessage.seen && // Last message not seen by the current user
+                    !lastMessage.isMyMessage && 
+                    !lastMessage.seen && 
                     (
                       <span
                         className={`w-5 h-5 rounded-full bg-green-500 mt-1 text-xs text-center text-white flex items-center justify-center ${
