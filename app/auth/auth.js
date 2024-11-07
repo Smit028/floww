@@ -1,5 +1,5 @@
 // auth/auth.js
-import { auth, firestore } from '../firebase/firebase';
+import { auth, firestore } from '../chat/firebase';
 import { GoogleAuthProvider, signInWithPopup } from 'firebase/auth';
 import setupUser from '../utils/setupUser';
 

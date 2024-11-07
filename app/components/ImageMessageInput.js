@@ -1,8 +1,8 @@
 import React, { useState, useRef } from 'react';
-import { storage } from '../firebase/firebase'; // Adjust the path based on your project structure
+import { storage } from '../chat/firebase'; // Adjust the path based on your project structure
 import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
 import { collection, addDoc, serverTimestamp } from 'firebase/firestore';
-import { auth } from '../firebase/firebase'; // Adjust the path based on your project structure
+import { auth } from '../chat/firebase'; // Adjust the path based on your project structure
 
 const ImageMessageInput = ({ selectedUser }) => {
     const [newMessage, setNewMessage] = useState("");

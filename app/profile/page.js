@@ -1,6 +1,6 @@
 "use client";
 import { useEffect, useState } from "react";
-import { firestore, auth } from "../firebase/firebase";
+import { firestore, auth } from "../chat/firebase";
 import { doc, updateDoc, getDoc } from "firebase/firestore";
 import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import "../globals.css"

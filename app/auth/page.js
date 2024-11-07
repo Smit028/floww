@@ -3,7 +3,7 @@ import { useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { loginWithGoogle } from '../auth/auth'; 
 import { onAuthStateChanged } from "firebase/auth";
-import { auth } from '../firebase/firebase'; 
+import { auth } from '../chat/firebase'; 
 import "../globals.css";
 
 const Auth = () => {

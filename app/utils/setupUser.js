@@ -1,6 +1,6 @@
 // utils/setupUser.js
 import { doc, setDoc, arrayUnion } from 'firebase/firestore';
-import { firestore } from '../firebase/firebase';
+import { firestore } from '../chat/firebase';
 
 const setupUser = async (user) => {
   try {
