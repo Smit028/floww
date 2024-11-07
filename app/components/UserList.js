@@ -162,14 +162,14 @@ const UserList = ({ users, selectedUser, onUserSelect, unreadCounts, totalusers 
   return (
     <div className="w-full border-r border-gray-300 bg-gray-50 h-full flex flex-col transition-all duration-500 ease-in-out">
       <div className="p-4 flex justify-between items-center border-b">
-        <h2 className="font-semibold text-lg">Users</h2>
+        <h2 className="font-semibold text-lg text-[#1E1E1E]">Users</h2>
         <div className="relative inline-block text-left">
-          <button
+          {/* <button
             onClick={toggleDropdown}
-            className="px-4 py-2 bg-blue-500 text-white rounded-md focus:outline-none"
+            className="px-4 py-2 bg-[#D8FF75] text-white rounded-md focus:outline-none"
           >
             Open Menu
-          </button>
+          </button> */}
 
           <div
             className={`absolute left-1/2 transform -translate-x-1/2 mt-2 w-72 bg-white rounded-md shadow-lg ring-1 ring-black ring-opacity-5 transition-all duration-300 ease-out z-50 ${
@@ -183,7 +183,7 @@ const UserList = ({ users, selectedUser, onUserSelect, unreadCounts, totalusers 
                 placeholder="Search user..."
                 value={dropdownSearchQuery}
                 onChange={(e) => setDropdownSearchQuery(e.target.value)}
-                className="w-full p-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 transition duration-300 ease-in-out text-black"
+                className="w-full p-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-[#D8FF75] transition duration-300 ease-in-out text-[#1E1E1E]"
               />
             </div>
 
@@ -198,79 +198,66 @@ const UserList = ({ users, selectedUser, onUserSelect, unreadCounts, totalusers 
         </div>
       </div>
 
-      <div className="p-4">
+      <div className="p-4 ">
         <input
           type="text"
           placeholder="Search user..."
           value={searchQuery}
           onChange={(e) => setSearchQuery(e.target.value)}
-          className="w-full p-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 transition duration-300 ease-in-out text-black"
+          className="w-full p-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-[#D8FF75] transition duration-300 ease-in-out text-[#1E1E1E]"
         />
       </div>
 
-      <ul className="flex-1 overflow-y-auto max-h-[calc(100vh-200px)]">
-        {filteredUsers.map((user, index) => {
-          const lastMessage = usersWithLastMessages.find(
-            (u) => u.id === user.id
-          );
-          const lastMessageText = lastMessage
-            ? lastMessage.lastMessage
-            : "No message";
-          const lastMessageTime = lastMessage
-            ? formatTimestamp(lastMessage.timestamp)
-            : "";
-          const seenStatus = lastMessage ? lastMessage.seen : "";
+      <ul className="flex-1 overflow-y-auto max-h-[calc(100vh-200px)] overflow-x-hidden">
+  {filteredUsers.map((user, index) => {
+    const lastMessage = usersWithLastMessages.find((u) => u.id === user.id);
+    const lastMessageText = lastMessage ? lastMessage.lastMessage : "No message";
+    const lastMessageTime = lastMessage ? formatTimestamp(lastMessage.timestamp) : "";
+    const seenStatus = lastMessage ? lastMessage.seen : "";
 
-          return (
-            <li
-              key={user.id}
-              onClick={() => onUserSelect(user)}
-              className={`p-4 cursor-pointer transition-all text-black transform duration-300 ease-in-out hover:bg-gray-200 ${
-                selectedUser?.id === user.id ? "bg-blue-100" : ""
-              }`}
-              style={{
-                transitionProperty: "transform, opacity",
-                opacity: 1,
-                transform: `translateY(${index * 10}px)`,
-              }}
-            >
-              <div className="flex justify-between items-center">
-                <div className="flex items-center">
-                  <img
-                    src={user.photoURL || img1.src}
-                    alt={user.name}
-                    className="w-12 h-12 rounded-full mr-4"
-                  />
-                  <div className="flex flex-col justify-center">
-                    <span className="font-semibold">{user.name}</span>
-                    <span className="text-sm text-gray-500">
-                      {lastMessageText}
-                    </span>
-                  </div>
-                </div>
+    return (
+      <li
+        key={user.id}
+        onClick={() => onUserSelect(user)}
+        className={`p-4 cursor-pointer transition-all text-[#1E1E1E] transform duration-300 ease-in-out hover:bg-gray-200 hover:scale-105 hover:shadow-lg hover:my-2 rounded-md ${
+          selectedUser?.id === user.id ? "bg-[#D8FF75]" : ""
+        }`}
+        style={{
+          transitionProperty: "transform, opacity, padding, margin",
+          opacity: 1,
+        }}
+      >
+        <div className="flex justify-between items-center">
+          <div className="flex items-center">
+            <img
+              src={user.photoURL || img1.src}
+              alt={user.name}
+              className="w-12 h-12 rounded-full mr-4"
+            />
+            <div className="flex flex-col justify-center">
+              <span className="font-semibold">{user.name}</span>
+              <span className="text-sm text-gray-500">{lastMessageText}</span>
+            </div>
+          </div>
 
-                <div className="flex flex-col items-end">
-                  <span className="text-xs text-gray-400">
-                    {lastMessageTime}
-                  </span>
-                  {lastMessage &&
-                    !lastMessage.isMyMessage && 
-                    !lastMessage.seen && 
-                    (
-                      <span
-                        className={`w-5 h-5 rounded-full bg-green-500 mt-1 text-xs text-center text-white flex items-center justify-center ${
-                          lastMessage.hasNewMessage ? "animate-pulse" : ""
-                        }`}
-                      >
-                        U
-                      </span>
-                    )}
-                </div>
-              </div>
-            </li>
-          );
-        })}
-      </ul>
+          <div className="flex flex-col items-end">
+            <span className="text-xs text-gray-500">{lastMessageTime}</span>
+            {lastMessage && !lastMessage.isMyMessage && !lastMessage.seen && (
+              <span
+                className={`w-5 h-5 rounded-full bg-green-500 mt-1 text-xs text-center text-white flex items-center justify-center ${
+                  lastMessage.hasNewMessage ? "animate-pulse" : ""
+                }`}
+              >
+                U
+              </span>
+            )}
+          </div>
+        </div>
+      </li>
+    );
+  })}
+</ul>
+
     </div>
   );
 };

@@ -31,6 +31,8 @@ import "../globals.css";
 import Img1 from "../chat/alter.jpeg";
 import Image from "next/image";
 import { query, orderBy, limit } from "firebase/firestore";
+import { IoMdPhotos } from "react-icons/io";
+
 
 import {
   AiOutlineHome,
@@ -395,51 +397,50 @@ export default function Home() {
       {/* Main Content Area with Columns */}
       <div className="flex flex-1 bg-gray-100 relative flex-col lg:flex-row">
         {/* Sidebar Column (Hidden on mobile) */}
-        {/* Sidebar Column (Hidden on mobile) */}
         <div
-          className={`bg-[#202020] min-h-full z-10 p-4 shadow-lg transition-all duration-300 ${
-            isExpanded ? "lg:w-[200px]" : "lg:w-[50px]"
-          } flex flex-col items-start lg:block hidden`}
-        >
-          {/* Sandwich Button (Expand/Collapse button) */}
-          <button
-            onClick={toggleColumn}
-            aria-label="Expand or collapse sidebar"
-            className="bg-gray-500 text-white p-2 rounded focus:outline-none flex items-center justify-center w-10 h-10 mt-2 ml-[-11px]"
-          >
-            ☰
-          </button>
+  className={`bg-[#202020] min-h-full z-10 p-4 shadow-lg transition-all duration-300 ${
+    isExpanded ? "lg:w-[200px]" : "lg:w-[50px]"
+  } flex flex-col items-start lg:block hidden`}
+>
+  {/* Sandwich Button (Expand/Collapse button) */}
+  <button
+    onClick={toggleColumn}
+    aria-label="Expand or collapse sidebar"
+    className="bg-[#3b3b3b] hover:bg-[#5a5a5a] text-white p-2 rounded focus:outline-none flex items-center justify-center w-10 h-10 mt-2 ml-[-11px] transition-colors duration-200"
+  >
+    ☰
+  </button>
 
-          {/* Menu Items */}
-          <ul className="flex flex-col items-start space-y-2 mt-4 flex-grow">
-            <li className="text-white py-2 flex items-center w-full">
-              <AiOutlineHome className="text-xl" />
-              {isExpanded && <span className="text-white ml-2">Home</span>}
-            </li>
-            <li className="text-white py-2 flex items-center w-full">
-              <AiOutlinePhone className="text-xl" />
-              {isExpanded && <span className="text-white ml-2">Contacts</span>}
-            </li>
-            <li className="text-white py-2 flex items-center w-full">
-              <AiOutlineSetting className="text-xl" />
-              {isExpanded && <span className="text-white ml-2">Settings</span>}
-            </li>
+  {/* Menu Items */}
+  <ul className="flex flex-col items-start space-y-2 mt-4 flex-grow">
+    <li className="text-white py-2 flex items-center w-full hover:bg-[#444444] rounded-md transition-colors duration-200">
+      <AiOutlineHome className="text-xl" />
+      {isExpanded && <span className="text-white ml-2">Home</span>}
+    </li>
+    <li className="text-white py-2 flex items-center w-full hover:bg-[#444444] rounded-md transition-colors duration-200">
+      <AiOutlinePhone className="text-xl" />
+      {isExpanded && <span className="text-white ml-2">Contacts</span>}
+    </li>
+    <li className="text-white py-2 flex items-center w-full hover:bg-[#444444] rounded-md transition-colors duration-200">
+      <AiOutlineSetting className="text-xl" />
+      {isExpanded && <span className="text-white ml-2">Settings</span>}
+    </li>
 
-            {/* Profile Section */}
-            <li className="text-white flex items-center w-full">
-              <div className="cursor-pointer" onClick={toggleSidebar}>
-                <Image
-                  src={Img1}
-                  alt="Profile Picture"
-                  width={30}
-                  height={30}
-                  className="rounded-full"
-                />
-              </div>
-              {isExpanded && <span className="text-white ml-2">Profile</span>}
-            </li>
-          </ul>
-        </div>
+    {/* Profile Section */}
+    <li className="text-white flex items-center w-full hover:bg-[#444444] rounded-md transition-colors duration-200">
+      <div className="cursor-pointer" onClick={toggleSidebar}>
+        <Image
+          src={Img1}
+          alt="Profile Picture"
+          width={30}
+          height={30}
+          className="rounded-full"
+        />
+      </div>
+      {isExpanded && <span className="text-white ml-2">Profile</span>}
+    </li>
+  </ul>
+</div>
 
         {/* 30% Width Column */}
         <div
@@ -460,129 +461,141 @@ export default function Home() {
 
         {/* 70% Width Column */}
         <div
-          className={`${
-            showThirdColumn ? "block" : "hidden"
-          } w-full lg:w-[70%] bg-gray-300 lg:block`}
-        >
-          {selectedUser && (
-            <div className="flex-1 flex flex-col bg-white h-full">
-              <div className="p-4 border-b border-gray-300 bg-gray-50 flex items-center">
-                {window.innerWidth < 768 && (
-                  <button
-                    onClick={goBackToSecondColumn}
-                    className="text-blue-500 mr-2"
-                  >
-                    ← Back
-                  </button>
-                )}
+  className={`${
+    showThirdColumn ? "block" : "hidden"
+  } w-full lg:w-[70%] text-[#1E1E1E] lg:block`} // Set the background color here
+>
+  {selectedUser && (
+    <div className="flex-1 flex flex-col bg-white h-full">
+<div className="p-4 border-b border-gray-300 text-[#1E1E1E] flex items-center  rounded-t-lg shadow-lg">
+  {/* Back Button (Only on Mobile) */}
+  {window.innerWidth < 768 && (
+    <button
+      onClick={goBackToSecondColumn}
+      className="text-[#1E1E1E] hover:text-[#4b4b4b] mr-2 transition-all duration-200 ease-in-out transform hover:scale-105"
+    >
+      ← Back
+    </button>
+  )}
 
-                {/* Profile Image of Selected User */}
-                <img
-                  src={selectedUser.photoURL || Img1.src} // Use selected user's photo or a default image
-                  alt={`${selectedUser.name}'s profile`}
-                  className="w-8 h-8 rounded-full mr-3" // Style for the image
-                />
-                <h3 className="text-lg font-semibold">{selectedUser.name}</h3>
-                <button onClick={() => handlevoicecall()}>Call</button>
-              </div>  
+  {/* Profile Image of Selected User */}
+  <img
+    src={selectedUser.photoURL || Img1.src} // Use selected user's photo or a default image
+    alt={`${selectedUser.name}'s profile`}
+    className="w-10 h-10 rounded-full border-2 border-white shadow-md mr-3"
+  />
 
-              <div className="flex-1 overflow-y-auto bg-gray-50 max-h-[calc(100vh-200px)]">
-                <div className="flex flex-col space-y-4 p-4">
-                  {messages.map((msg) => {
-                    const messageUser = users.find(
-                      (user) => user.id === msg.uid
-                    );
-                    const messageTime = new Date(
-                      msg.timestamp?.seconds * 1000
-                    ).toLocaleTimeString([], {
-                      hour: "2-digit",
-                      minute: "2-digit",
-                    });
+  {/* User's Name */}
+  <h3 className="text-xl font-semibold text-[#1E1E1E] truncate max-w-xs logo" >{selectedUser.name}</h3>
 
-                    return (
-                      <div
-                        key={msg.id}
-                        className={`flex items-start space-x-3 ${
-                          msg.uid === auth.currentUser.uid ? "justify-end" : ""
+  {/* Call Button */}
+  <button
+    onClick={() => handlevoicecall()}
+    className="ml-auto text-[#1E1E1E] hover:text-[#4b4b4b] transition-all duration-200 ease-in-out transform hover:scale-105"
+  >
+    Call
+  </button>
+</div>
+
+
+      <div className="flex-1 overflow-y-auto  max-h-[calc(100vh-200px)] scrollbar-thin scrollbar-thumb-gray-[#D8FF75] scrollbar-track-gray-300 scrollbar-thumb-rounded-full scrollbar-track-rounded-full">
+        <div className="flex flex-col space-y-4 p-4">
+          {messages.map((msg) => {
+            const messageUser = users.find((user) => user.id === msg.uid);
+            const messageTime = new Date(msg.timestamp?.seconds * 1000).toLocaleTimeString([], {
+              hour: "2-digit",
+              minute: "2-digit",
+            });
+
+            return (
+              <div
+                key={msg.id}
+                className={`flex items-start space-x-3 ${
+                  msg.uid === auth.currentUser.uid ? "justify-end" : ""
+                }`}
+              >
+                <div></div>
+                <div
+                  className={`p-2 rounded-lg shadow-sm max-w-xs ${
+                    msg.uid === auth.currentUser.uid
+                      ? "bg-[#1E1E1E] text-white self-end" // Sent message background color
+                      : "bg-[#D8FF75] text-[#1E1E1E] self-start" // Received message background color
+                  } flex flex-col`}
+                  style={{
+                    wordWrap: "break-word",
+                    overflowWrap: "break-word",
+                  }} // Allow text wrapping
+                >
+                  <div className="flex-1">
+                    {msg.imageUrl ? (
+                      <img
+                        src={msg.imageUrl}
+                        alt="Sent"
+                        className="rounded-md mb-1"
+                      />
+                    ) : (
+                      <span className="block mb-1">{msg.text}</span>
+                    )}
+                  </div>
+                  <div className="flex justify-end items-center space-x-1 text-[10px] text-gray-400">
+                    <span>{messageTime}</span>
+                    {msg.uid === auth.currentUser.uid && ( // Only show ticks for the sender's messages
+                      <span
+                        className={`ml-1 ${
+                          msg.seen ? "text-[#36ff86]" : "text-gray-50"
                         }`}
                       >
-                        <div></div>
-                        <div
-                          className={`p-2 rounded-lg shadow-sm max-w-xs ${
-                            msg.uid === auth.currentUser.uid
-                              ? "bg-[#dcf8c6] text-black self-end"
-                              : "bg-gray-200 text-gray-800 self-start"
-                          } flex flex-col`}
-                          style={{
-                            wordWrap: "break-word",
-                            overflowWrap: "break-word",
-                          }} // Allow text wrapping
-                        >
-                          <div className="flex-1">
-                            {msg.imageUrl ? (
-                              <img
-                                src={msg.imageUrl}
-                                alt="Sent"
-                                className="rounded-md mb-1"
-                              />
-                            ) : (
-                              <span className="block mb-1">{msg.text}</span>
-                            )}
-                          </div>
-                          <div className="flex justify-end items-center space-x-1 text-[10px] text-gray-500">
-                            <span>{messageTime}</span>
-                            {msg.uid === auth.currentUser.uid && ( // Only show ticks for the sender's messages
-                              <span
-                                className={`ml-1 ${
-                                  msg.seen ? "text-green-600" : "text-gray-500"
-                                }`}
-                              >
-                                {msg.seen ? "✓✓" : "✓"}
-                              </span>
-                            )}
-                          </div>
-                        </div>
-                      </div>
-                    );
-                  })}
-
-                  <div ref={messagesEndRef} />
+                        {msg.seen ? "✓✓" : "✓"}
+                      </span>
+                    )}
+                  </div>
                 </div>
               </div>
+            );
+          })}
 
-              <div className="absolute w-[-webkit-fill-available] bottom-0 p-2 mb-4 border-t border-gray-300 bg-gray-50 flex items-center space-x-2">
-                <textarea
-                  ref={inputRef}
-                  value={newMessage}
-                  onChange={(e) => setNewMessage(e.target.value)}
-                  onKeyDown={handleKeyDown}
-                  placeholder="Type your message..."
-                  className="flex-1 p-2 border rounded-md resize-none focus:outline-none text-black"
-                  rows="1"
-                />
-                <input
-                  type="file"
-                  accept="image/*"
-                  onChange={handleImageChange}
-                  className="hidden"
-                  id="image-upload"
-                />
-                <label
-                  htmlFor="image-upload"
-                  className="p-2 text-blue-500 cursor-pointer"
-                >
-                  📷
-                </label>
-                <button
-                  onClick={handleSend}
-                  className="bg-blue-500 hover:bg-blue-600 text-white p-2 rounded-md"
-                >
-                  Send
-                </button>
-              </div>
-            </div>
-          )}
+          <div ref={messagesEndRef} />
         </div>
+      </div>
+
+      <div className="absolute w-[-webkit-fill-available] bottom-0 p-2 mb-4 border-t border-gray-300 text-[#2A2A2A] flex items-center space-x-2 shadow-[0_-5px_15px_rgba(0,0,0,0.1)]">
+      <textarea
+  ref={inputRef}
+  value={newMessage}
+  onChange={(e) => setNewMessage(e.target.value)}
+  onKeyDown={handleKeyDown}
+  placeholder="Type your message..."
+  className="flex-1 p-3 border rounded-xl resize-none focus:outline-none focus:ring-2 focus:ring-[#0077cc] text-[#1E1E1E] bg-[#f4f4f4] transition-all duration-300 ease-in-out"
+  rows="1"
+/>
+
+
+        <input
+          type="file"
+          accept="image/*"
+          onChange={handleImageChange}
+          className="hidden"
+          id="image-upload"
+        />
+        <label
+          htmlFor="image-upload"
+          className="p-2 text-[#1E1E1E] cursor-pointer hover:text-[#005fa3]"
+        >
+          <IoMdPhotos size={30}  />
+        </label>
+        <button
+          onClick={handleSend}
+          className="bg-[#1E1E1E] hover:bg-[#005fa3] text-white p-2 rounded-md"
+        >
+          Send
+        </button>
+      </div>
+    </div>
+  )}
+</div>
+
+
+
       </div>
       <div
         className={`fixed bottom-0 left-20 bg-gray-800 text-white w-[500px] p-4 flex  transition-transform duration-500  ease-in-out ${
