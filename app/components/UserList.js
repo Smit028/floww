@@ -100,11 +100,39 @@ const UserList = ({ users, selectedUser, onUserSelect, unreadCounts }) => {
 
   const formatTimestamp = (timestamp) => {
     if (!timestamp) return "";
-    const date = new Date(timestamp.seconds * 1000);
-    const hours = date.getHours().toString().padStart(2, "0");
-    const minutes = date.getMinutes().toString().padStart(2, "0");
-    return `${hours}:${minutes}`;
+  
+    const messageDate = new Date(timestamp.seconds * 1000);
+    const today = new Date();
+    const yesterday = new Date();
+    yesterday.setDate(today.getDate() - 1);
+  
+    const isToday =
+      messageDate.getDate() === today.getDate() &&
+      messageDate.getMonth() === today.getMonth() &&
+      messageDate.getFullYear() === today.getFullYear();
+  
+    const isYesterday =
+      messageDate.getDate() === yesterday.getDate() &&
+      messageDate.getMonth() === yesterday.getMonth() &&
+      messageDate.getFullYear() === yesterday.getFullYear();
+  
+    if (isToday) {
+      // Display time if the message is from today
+      const hours = messageDate.getHours().toString().padStart(2, "0");
+      const minutes = messageDate.getMinutes().toString().padStart(2, "0");
+      return `${hours}:${minutes}`;
+    } else if (isYesterday) {
+      // Display "Yesterday" if the message is from the previous day
+      return "Yesterday";
+    } else {
+      // Display the date in DD/MM/YYYY format if the message is older than one day
+      const day = messageDate.getDate().toString().padStart(2, "0");
+      const month = (messageDate.getMonth() + 1).toString().padStart(2, "0");
+      const year = messageDate.getFullYear();
+      return `${day}/${month}/${year}`;
+    }
   };
+  
 
   return (
     <div className="w-full border-r border-gray-300 bg-gray-50 h-full flex flex-col transition-all duration-500 ease-in-out">
