@@ -458,97 +458,130 @@ export default function Home() {
         </div>
 
         {/* 70% Width Column */}
-     <div className={`${showThirdColumn ? "block" : "hidden"} w-full lg:w-[70%] bg-gray-300 lg:block`}>
-  {selectedUser && (
-    <div className="flex flex-col h-full">
-      {/* Header Section */}
-      <div className="fixed top-0 left-0 right-0 z-10 p-4 border-b border-gray-300 bg-gray-50 flex items-center">
-        {isMobile && (
-          <button onClick={goBackToSecondColumn} className="text-blue-500 mr-2">
-            ← Back
-          </button>
-        )}
-        <img
-          src={selectedUser.photoURL || Img1.src}
-          alt={`${selectedUser.name}'s profile`}
-          className="w-8 h-8 rounded-full mr-3"
-        />
-        <h3 className="text-lg font-semibold">{selectedUser.name}</h3>
-        <button onClick={() => handlevoicecall()} className="ml-auto text-blue-500">
-          Call
-        </button>
-      </div>
+        <div
+          className={`${
+            showThirdColumn ? "block" : "hidden"
+          } w-full lg:w-[70%] bg-gray-300 lg:block`}
+        >
+          {selectedUser && (
+            <div className="flex-1 flex flex-col bg-white h-full">
+              <div className="p-4 border-b border-gray-300 bg-gray-50 flex items-center">
+                {window.innerWidth < 768 && (
+                  <button
+                    onClick={goBackToSecondColumn}
+                    className="text-blue-500 mr-2"
+                  >
+                    ← Back
+                  </button>
+                )}
 
-      {/* Messages Section */}
-      <div className="flex-1 overflow-y-auto bg-gray-50 mt-[64px] max-h-[calc(100vh-64px-60px)]">
-        {/* Messages List */}
-        <div className="flex flex-col space-y-4 p-4">
-          {messages.map((msg) => {
-            const messageUser = users.find(user => user.id === msg.uid);
-            const messageTime = msg.timestamp
-              ? new Date(msg.timestamp.seconds * 1000).toLocaleTimeString([], {
-                  hour: "2-digit",
-                  minute: "2-digit",
-                })
-              : "";
+                {/* Profile Image of Selected User */}
+                <img
+                  src={selectedUser.photoURL || Img1.src} // Use selected user's photo or a default image
+                  alt={`${selectedUser.name}'s profile`}
+                  className="w-8 h-8 rounded-full mr-3" // Style for the image
+                />
+                <h3 className="text-lg font-semibold">{selectedUser.name}</h3>
+                <button onClick={() => handlevoicecall()}>Call</button>
+              </div>
 
-            return (
-              <div
-                key={msg.id}
-                className={`flex items-start space-x-3 ${msg.uid === auth.currentUser?.uid ? "justify-end" : ""}`}
-              >
-                <div
-                  className={`p-2 rounded-lg shadow-sm max-w-xs ${
-                    msg.uid === auth.currentUser?.uid ? "bg-[#dcf8c6] text-black self-end" : "bg-gray-200 text-gray-800 self-start"
-                  } flex flex-col`}
-                  style={{ wordWrap: "break-word", overflowWrap: "break-word" }}
-                >
-                  <div className="flex-1">
-                    {msg.imageUrl ? (
-                      <img src={msg.imageUrl} alt="Sent" className="rounded-md mb-1" />
-                    ) : (
-                      <span className="block mb-1">{msg.text}</span>
-                    )}
-                  </div>
-                  <div className="flex justify-end items-center space-x-1 text-[10px] text-gray-500">
-                    <span>{messageTime}</span>
-                    {msg.uid === auth.currentUser?.uid && (
-                      <span className={`ml-1 ${msg.seen ? "text-green-600" : "text-gray-500"}`}>
-                        {msg.seen ? "✓✓" : "✓"}
-                      </span>
-                    )}
-                  </div>
+              <div className="flex-1 overflow-y-auto bg-gray-50 max-h-[calc(100vh-200px)]">
+                <div className="flex flex-col space-y-4 p-4">
+                  {messages.map((msg) => {
+                    const messageUser = users.find(
+                      (user) => user.id === msg.uid
+                    );
+                    const messageTime = new Date(
+                      msg.timestamp?.seconds * 1000
+                    ).toLocaleTimeString([], {
+                      hour: "2-digit",
+                      minute: "2-digit",
+                    });
+
+                    return (
+                      <div
+                        key={msg.id}
+                        className={`flex items-start space-x-3 ${
+                          msg.uid === auth.currentUser.uid ? "justify-end" : ""
+                        }`}
+                      >
+                        <div></div>
+                        <div
+                          className={`p-2 rounded-lg shadow-sm max-w-xs ${
+                            msg.uid === auth.currentUser.uid
+                              ? "bg-[#dcf8c6] text-black self-end"
+                              : "bg-gray-200 text-gray-800 self-start"
+                          } flex flex-col`}
+                          style={{
+                            wordWrap: "break-word",
+                            overflowWrap: "break-word",
+                          }} // Allow text wrapping
+                        >
+                          <div className="flex-1">
+                            {msg.imageUrl ? (
+                              <img
+                                src={msg.imageUrl}
+                                alt="Sent"
+                                className="rounded-md mb-1"
+                              />
+                            ) : (
+                              <span className="block mb-1">{msg.text}</span>
+                            )}
+                          </div>
+                          <div className="flex justify-end items-center space-x-1 text-[10px] text-gray-500">
+                            <span>{messageTime}</span>
+                            {msg.uid === auth.currentUser.uid && ( // Only show ticks for the sender's messages
+                              <span
+                                className={`ml-1 ${
+                                  msg.seen ? "text-green-600" : "text-gray-500"
+                                }`}
+                              >
+                                {msg.seen ? "✓✓" : "✓"}
+                              </span>
+                            )}
+                          </div>
+                        </div>
+                      </div>
+                    );
+                  })}
+
+                  <div ref={messagesEndRef} />
                 </div>
               </div>
-            );
-          })}
-          <div ref={messagesEndRef} />
+
+              <div className="absolute w-[-webkit-fill-available] bottom-0 p-2 mb-4 border-t border-gray-300 bg-gray-50 flex items-center space-x-2">
+                <textarea
+                  ref={inputRef}
+                  value={newMessage}
+                  onChange={(e) => setNewMessage(e.target.value)}
+                  onKeyDown={handleKeyDown}
+                  placeholder="Type your message..."
+                  className="flex-1 p-2 border rounded-md resize-none focus:outline-none text-black"
+                  rows="1"
+                />
+                <input
+                  type="file"
+                  accept="image/*"
+                  onChange={handleImageChange}
+                  className="hidden"
+                  id="image-upload"
+                />
+                <label
+                  htmlFor="image-upload"
+                  className="p-2 text-blue-500 cursor-pointer"
+                >
+                  📷
+                </label>
+                <button
+                  onClick={handleSend}
+                  className="bg-blue-500 hover:bg-blue-600 text-white p-2 rounded-md"
+                >
+                  Send
+                </button>
+              </div>
+            </div>
+          )}
         </div>
-      </div>
-
-      {/* Message Input Section */}
-      <div className="fixed bottom-0 left-0 right-0 p-2 bg-gray-50 border-t border-gray-300 flex items-center space-x-2 z-10">
-        <textarea
-          ref={inputRef}
-          value={newMessage}
-          onChange={(e) => setNewMessage(e.target.value)}
-          onKeyDown={handleKeyDown}
-          placeholder="Type your message..."
-          className="flex-1 p-2 border rounded-md resize-none focus:outline-none text-black"
-          rows="1"
-        />
-        <input type="file" accept="image/*" onChange={handleImageChange} className="hidden" id="image-upload" />
-        <label htmlFor="image-upload" className="p-2 text-blue-500 cursor-pointer">
-          📷
-        </label>
-        <button onClick={handleSend} className="bg-blue-500 hover:bg-blue-600 text-white p-2 rounded-md">
-          Send
-        </button>
-      </div>
-    </div>
-  )}
-</div>
-
       </div>
 
       <div
