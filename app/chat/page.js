@@ -401,7 +401,7 @@ export default function Home() {
 
       {/* Full-Width Header */}
       <header className="w-full bg-[#202020] text-white">
-        <h1 className="text-center text-lg p-2">Floww</h1>
+        <h1 className="text-center text-lg p-2">Flowww</h1>
       </header>
 
       {/* Main Content Area with Columns */}
