@@ -164,17 +164,17 @@ const UserList = ({ users, selectedUser, onUserSelect, unreadCounts, totalusers 
       <div className="p-4 flex justify-between items-center border-b">
         <h2 className="font-semibold text-lg text-[#1E1E1E]">Users</h2>
         <div className="relative inline-block text-left">
-          <button
+          {/* <button
             onClick={toggleDropdown}
-            className="px-4 py-2 bg-[#D8FF75] text-white rounded-md focus:outline-none"
+            className="px-4 py-2 bg-[#D8FF75] text-[#1f1f1f] rounded-md focus:outline-none"
           >
             New User
-          </button>
+          </button> */}
 
           <div
             className={`absolute left-1/2 transform -translate-x-1/2 mt-2 w-72 bg-white rounded-md shadow-lg ring-1 ring-black ring-opacity-5 transition-all duration-300 ease-out z-50 ${
               isOpen ? "opacity-100 scale-100" : "opacity-0 scale-95 pointer-events-none"
-            } fixed top-10 left-0 right-0 max-h-60 overflow-y-auto`}
+            } fixed top-20 left-0 right-0 max-h-60 overflow-y-auto`}
           >
             {/* Search input for dropdown */}
             <div className="p-2">
