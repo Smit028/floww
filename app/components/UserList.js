@@ -164,12 +164,12 @@ const UserList = ({ users, selectedUser, onUserSelect, unreadCounts, totalusers 
       <div className="p-4 flex justify-between items-center border-b">
         <h2 className="font-semibold text-lg text-[#1E1E1E]">Users</h2>
         <div className="relative inline-block text-left">
-          {/* <button
+          <button
             onClick={toggleDropdown}
             className="px-4 py-2 bg-[#D8FF75] text-white rounded-md focus:outline-none"
           >
-            Open Menu
-          </button> */}
+            New User
+          </button>
 
           <div
             className={`absolute left-1/2 transform -translate-x-1/2 mt-2 w-72 bg-white rounded-md shadow-lg ring-1 ring-black ring-opacity-5 transition-all duration-300 ease-out z-50 ${
@@ -219,7 +219,7 @@ const UserList = ({ users, selectedUser, onUserSelect, unreadCounts, totalusers 
       <li
         key={user.id}
         onClick={() => onUserSelect(user)}
-        className={`p-4 cursor-pointer transition-all text-[#1E1E1E] transform duration-300 ease-in-out hover:bg-gray-200 hover:scale-105 hover:shadow-lg hover:my-2 rounded-md ${
+        className={`border-b-2 p-4 cursor-pointer transition-all text-[#1E1E1E] transform duration-300 ease-in-out hover:bg-gray-200 hover:scale-105 hover:shadow-lg hover:my-2 rounded-md ${
           selectedUser?.id === user.id ? "bg-[#D8FF75]" : ""
         }`}
         style={{
